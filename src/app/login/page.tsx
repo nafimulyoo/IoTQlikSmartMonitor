@@ -1,6 +1,8 @@
  
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { login, getSession } from '@/lib/auth'
 
 
@@ -16,10 +18,12 @@ export default function Page() {
   }
 
   return (
-    <form action={login}>
-      <input type="username" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+    <>
+      <form action={login}>
+        <Input type="username" name="username" placeholder="Username" required />
+        <Input type="password" name="password" placeholder="Password" required />
+        <Button type="submit">Login </Button>
+      </form>
+    </>
   )
 }

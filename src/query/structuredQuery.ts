@@ -1,48 +1,37 @@
 const baseUrl = "iot.ayou.id/api";
 const getUrlFromStructuredQuery = (structuredQuery: any, token: string, site: string, username: string) => {
-  var url;
+  let url;
 
-  if (structuredQuery.query_type === "device-list") {
-    url = new URL(`https://${baseUrl}/data`);
-    url.searchParams.append("token", token);
-    url.searchParams.append("site", site);
-    url.searchParams.append("type", "device-list");
+  switch (structuredQuery.query_type) {
+    case "device-list":
+      url = new URL(`https://${baseUrl}/devicelist`);
+      break;
+    case "parameter-list":
+      url = new URL(`https://${baseUrl}/parlist`);
+      url.searchParams.append("device", structuredQuery.device_code);
+      break;
+    case "data-last":
+      url = new URL(`https://${baseUrl}/datalast`);
+      url.searchParams.append("device", structuredQuery.device_code);
+      break;
+    case "alarm-log":
+      url = new URL(`https://${baseUrl}/alarmlog`);
+      break;
+    case "data-log":
+      url = new URL(`https://${baseUrl}/datalog`);
+      url.searchParams.append("device", structuredQuery.device_code);
+      url.searchParams.append("param", structuredQuery.parameters.join(","));
+      url.searchParams.append("from", structuredQuery.from_time);
+      url.searchParams.append("to", structuredQuery.to_time);
+      break;
+    default:
+      throw new Error("Unsupported query type");
   }
-  if (structuredQuery.query_type === "parameter-list") {
-    url = new URL(`https://${baseUrl}/data`);
-    url.searchParams.append("token", token);
-    url.searchParams.append("site", site);
-    url.searchParams.append("type", "parameter-list");
-    url.searchParams.append("device_code", structuredQuery.device_code);
-  }
-  if (structuredQuery.query_type === "data-last") {
-    url = new URL(`https://${baseUrl}/data`);
-    url.searchParams.append("token", token);
-    url.searchParams.append("site", site);
-    url.searchParams.append("type", "data-last");
-    url.searchParams.append("device_code", structuredQuery.device_code);
-    url.searchParams.append("parameters", structuredQuery.parameters);
-  }
-  if (structuredQuery.query_type === "alarm-log") {
-    console.log("ALARM LOG");
-    url = new URL(`https://${baseUrl}/alarmlog`);
-    url.searchParams.append("token", token);
-    url.searchParams.append("site", site);
-  }
-  if (structuredQuery.query_type === "data-log") {
-    url = new URL(`https://${baseUrl}/alarmlog`);
-    url.searchParams.append("token", token);
-    url.searchParams.append("site", site);
-    url.searchParams.append("type", "data-log");
-    url.searchParams.append("device_code", structuredQuery.device_code);
-    url.searchParams.append("parameters", structuredQuery.parameters);
-    url.searchParams.append("from_time", structuredQuery.from_time);
-    url.searchParams.append("to_time", structuredQuery.to_time);
-  }
-  if (structuredQuery.query_type === "error") {
-    url = new URL(`https://${baseUrl}/data`);
-    url.searchParams.append("type", "error");
-  }
+
+  // Common parameters for all requests
+  url.searchParams.append("token", token);
+  url.searchParams.append("site", site);
+
   console.log(url.href);
   return url.href;
 };

@@ -1,12 +1,43 @@
 "use client";
 import { use, useEffect, useState } from "react";
 import { supabase } from "@/lib/initSupabase";
-  
-const HistoryPage = ({ history, setModalData, session }: any) => {
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast"
 
-  const handleAddToDashboard = async (history_id: any) => {
-    
-  }
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  PopoverClose,
+} from "@/components/ui/popover"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"  
+const HistoryPage = ({ history, openModal, fetchDashboardCards, session }: any) => {
+
+  const { toast } = useToast();
+  const handleAddToDashboard = async (history: any, card_id: number) => {
+    console.log("saving history");
+    const { data, error }: any = await supabase
+      .from("Dashboard Card")
+      .insert({
+        username: session.username,
+        card_id: card_id,
+        created_at: new Date(),
+        query_name: history.query_name,
+        structured_query: history.structured_query,
+      }); 
+      toast({
+        title: `${history.query_name} added to dashboard`,
+        description: "You can now view this query on your dashboard",
+      })
+      fetchDashboardCards();
+     }
 
   const handleViewHistory = async (structured_query: any, session: any) => {
     const newModalData = await fetch("/api/query", {
@@ -26,44 +57,57 @@ const HistoryPage = ({ history, setModalData, session }: any) => {
     }).then((res) => res.json());
 
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
-    setModalData(newModalData);
+    openModal(newModalData);
     modalElement?.showModal();
   };
 
   return (
-    <div>
-      <h1>History</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Query Name</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+    <>
+      <h1 className="">History</h1>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Time</TableHead>
+            <TableHead>Query Name</TableHead>
+            <TableHead></TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {history.map((history: any) => (
-            <tr key={history.id}>
-              <td>{history.created_at}</td>
-              <td>{history.query_name}</td>
-              <td>
-                <button
+            <TableRow key={history.id}>
+              <TableCell>{history.created_at}</TableCell>
+              <TableCell>{history.query_name}</TableCell>
+              <TableCell>
+                <Popover>
+                  <PopoverTrigger>
+                    Add to Dashboard
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverClose>
+                      <Button onClick={() => handleAddToDashboard(history, 1)}>1</Button>
+                      <Button onClick={() => handleAddToDashboard(history, 2)}>2</Button>
+                      <Button onClick={() => handleAddToDashboard(history, 3)}>3</Button>
+                      <Button onClick={() => handleAddToDashboard(history, 4)}>4</Button>
+                    </PopoverClose>
+                  </PopoverContent>
+                </Popover>
+              </TableCell>
+              <TableCell>
+                
+                <Button
                   onClick={() => {
                     handleViewHistory(history.structured_query, session);
                   }}
                 >
                   View
-                </button>
-              </td>
-              <td>
-                <button>Add to Dashboard</button>
-              </td>
-            </tr>
+                </Button>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </>
   );
 }
 

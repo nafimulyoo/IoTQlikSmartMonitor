@@ -1,33 +1,42 @@
 import React, { useState } from "react";
 import SelectionInput from "./SelectionInput";
 import TextInput from "./TextInput";
+import { Button } from "@/components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 interface JSX {
   IntrinsicElements: {
-    input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    input: React.DetailedHTMLProps<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      HTMLInputElement
+    >;
   };
 }
 
-const QueryPage = ({ fetchHistory, setModalData, session }: any) => {
+const QueryPage = ({ fetchHistory, openModal, session }: any) => {
   const [inputQuery, setInputQuery] = useState({});
   // send query to server, get response
 
   const handleQuery = async (inputQuery: any) => {
     const data = await fetch("/api/query", {
       method: "POST",
+      next: { revalidate: 3600 },
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        {
-          method : "new",
-          session,
-          query_input : inputQuery
-        }
-      ),
+      body: JSON.stringify({
+        method: "new",
+        session,
+        query_input: inputQuery,
+      }),
     }).then((res) => res.json());
-    
-    setModalData(data);
+
+    openModal(data);
     fetchHistory();
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
     modalElement?.showModal();
@@ -35,34 +44,25 @@ const QueryPage = ({ fetchHistory, setModalData, session }: any) => {
 
   return (
     <>
-      <div role="tablist" className="tabs tabs-bordered">
-        <input
-          type="radio"
-          name="queryMode"
-          role="tab"
-          className="tab"
-          aria-label="Text/Voice Input"
-          defaultChecked
-        />
-        <div role="tabpanel" className="tab-content p-10">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Start querying your IoT data
+      </h1>
+      <Tabs defaultValue="text">
+        <TabsList>
+          <TabsTrigger value="text">Text</TabsTrigger>
+          <TabsTrigger value="select">Select</TabsTrigger>
+        </TabsList>
+        <TabsContent value="text">
           <TextInput setInputQuery={setInputQuery} inputQuery={inputQuery} />
-        </div>
-
-        <input
-          type="radio"
-          name="queryMode"
-          role="tab"
-          className="tab"
-          aria-label="Selection Input"
-        />
-        <div role="tabpanel" className="tab-content p-10">
+        </TabsContent>
+        <TabsContent value="select">
           <SelectionInput
             setInputQuery={setInputQuery}
             inputQuery={inputQuery}
           />
-        </div>
-      </div>
-      <button onClick={() => handleQuery(inputQuery)}>Query</button>
+        </TabsContent>
+      </Tabs>
+      <Button onClick={() => handleQuery(inputQuery)}>Query</Button>
     </>
   );
 };

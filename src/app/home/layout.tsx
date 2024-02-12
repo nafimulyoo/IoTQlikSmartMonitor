@@ -1,3 +1,5 @@
+import { Toaster } from "@/components/ui/toaster"
+
 export default function HomeLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,8 @@ export default function HomeLayout({
 }>) {
     return (
       <>
-        {children}
+          {children}
+          <Toaster/>        
       </>
   );
 }

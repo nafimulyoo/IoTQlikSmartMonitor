@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import AudioInput from './AudioInput'
+import { Input } from '@/components/ui/input'
 
 const TextInput = ({ setInputQuery }: any) => {
 
@@ -16,10 +17,10 @@ const TextInput = ({ setInputQuery }: any) => {
   }, [inputText])
   
   return (
-    <div>
-      <input type="text" onChange={ (e) => setInputText(e.target.value)} value={ inputText }/>
+    <>
+      <Input type="text" onChange={ (e) => setInputText(e.target.value)} value={ inputText }/>
       <AudioInput setInputText = { setInputText } />
-    </div>
+    </>
   )
 }
 

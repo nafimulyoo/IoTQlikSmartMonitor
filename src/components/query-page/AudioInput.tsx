@@ -1,4 +1,5 @@
 import { useWhisper } from '@chengsokdara/use-whisper'
+import { Button } from '../ui/button'
 
 const AudioInput = ({ setInputText }: any) => {
   const onTranscribe = async (blob: Blob) => {
@@ -31,9 +32,9 @@ const AudioInput = ({ setInputText }: any) => {
 
   return (
     <>
-      <button onMouseDown={startRecording} onMouseUp={stopRecording}>
+      <Button onMouseDown={startRecording} onMouseUp={stopRecording}>
         Record
-      </button>
+      </Button>
     </>
   )
 }
