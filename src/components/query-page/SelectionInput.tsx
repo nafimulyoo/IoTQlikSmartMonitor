@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const SelectionInput = ({ setInputQuery, inputQuery }: any) => {
+const SelectionInput = ({ setInputQuery, inputQuery, children }: any) => {
   
   const [ selection1, setSelection1 ] = useState("");
   const [ selection2, setSelection2 ] = useState("");
@@ -46,6 +46,9 @@ const SelectionInput = ({ setInputQuery, inputQuery }: any) => {
   
   return (
     <>
+    <div className="flex flex-row">
+
+    
       <Select  value={selection1} onValueChange={(value) => setSelection1(value)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a fruit" />
@@ -124,6 +127,11 @@ const SelectionInput = ({ setInputQuery, inputQuery }: any) => {
           />
         </PopoverContent>
       </Popover>
+    </div>
+    
+    </div>
+    <div className="w-32 flex justify-center items-center">
+    {children}
     </div>
     </>
   );

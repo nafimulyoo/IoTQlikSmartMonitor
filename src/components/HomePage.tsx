@@ -149,7 +149,7 @@ const HomePage = () => {
             </DialogHeader>
             <QueryModalData modalData={modalData} />
             <DialogClose asChild>
-              <Button>Close</Button>
+              <Button onClick={() => setModalVisible(false)}>Close</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -166,9 +166,9 @@ const HomePage = () => {
           />
         </div>
 
-        <div className="p-10" style={queryStyle}>
+        <div className="pt-10" style={queryStyle}>
           <QueryPage
-            fetchHistory={() => fetchHistory}
+            fetchHistory={fetchHistory}
             openModal={openModal}
             session={session}
           />
@@ -177,9 +177,9 @@ const HomePage = () => {
         <div className="pt-10" style={historyStyle}>
           <HistoryPage
             history={history}
-            openModal={() => openModal}
+            openModal={openModal}
             session={session}
-            fetchDashboardCards={() => fetchDashboardCards}
+            fetchDashboardCards={fetchDashboardCards}
           />
         </div>
       </>

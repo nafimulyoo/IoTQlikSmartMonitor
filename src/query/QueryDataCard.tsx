@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   PopoverClose,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 const QueryDataCard = ({
   dashboardCards,
@@ -20,10 +20,11 @@ const QueryDataCard = ({
   openModal,
   session,
   deleteDashboardCard,
-  setActiveTab
+  setActiveTab,
 }: any) => {
-
-  const cardEntry = dashboardCards.find((card: any) => card.card_id === cardNumber)  
+  const cardEntry = dashboardCards.find(
+    (card: any) => card.card_id === cardNumber
+  );
 
   const [queryData, setQueryData] = useState({});
 
@@ -46,7 +47,7 @@ const QueryDataCard = ({
     }).then((res) => res.json());
     setQueryData(data);
   };
-  
+
   useEffect(() => {
     if (cardEntry) {
       if (Object.keys(queryData).length === 0) {
@@ -67,15 +68,21 @@ const QueryDataCard = ({
         <Card className="h-full shadow-2xl overflow-hidden">
           <CardHeader>
             <CardTitle>{JSON.stringify(cardEntry.query_name)}</CardTitle>
-            <Button variant="outline" onClick={() => deleteDashboardCard(cardEntry.card_id)}>X</Button>
+            <Button
+              variant="outline"
+              onClick={() => deleteDashboardCard(cardEntry.card_id)}
+            >
+              X
+            </Button>
             <CardDescription>
               {JSON.stringify(cardEntry.structured_query)}
             </CardDescription>
           </CardHeader>
           <CardContent>
-
             <p>{JSON.stringify(queryData)}</p>
-            <Button variant="outline" onClick={() => setQueryData({})}>Refresh</Button>
+            <Button variant="outline" onClick={() => setQueryData({})}>
+              Refresh
+            </Button>
             <Button onClick={() => handleViewCard(queryData)}>View</Button>
           </CardContent>
         </Card>
@@ -84,28 +91,22 @@ const QueryDataCard = ({
   } else {
     return (
       <>
-        <Card className="h-full shadow-2xl">
-          <CardHeader>
-            <CardTitle>Add Query Data</CardTitle>
-            <CardDescription>
-              Add a query to this card to view the data
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-          <Popover>
-              <PopoverTrigger>
-                <Button  className="btn btn-primary bg-gray-700 border-0 hover:bg-gray-800 h-full">Add Query</Button>
-              </PopoverTrigger>
-              <PopoverContent >
-                <PopoverClose >
-                  <Button onClick={() => setActiveTab("query")}>New Query</Button>
-                  <Button onClick={() => setActiveTab("history")}>Query History</Button>
-                </PopoverClose>
-              </PopoverContent>
-            </Popover>
-    
-          </CardContent>
-        </Card>
+        <div class="dropdown border-gray-700 border-2 border-dotted w-full h-full grid card  rounded-box place-items-center border-opacity-50">
+          <Button>
+            <span class="text-xl font-bold mb-0.5">+</span> Add Data
+          </Button>
+          <div
+            tabindex="0"
+            class="dropdown-content z-[2] card card-compact w-64 p-2 bg-base-100 shadow-md"
+          >
+            <div class="card-body">
+              <Button onClick={() => setActiveTab("query")}>New Query</Button>
+              <Button onClick={() => setActiveTab("history")}>
+                Query History
+              </Button>
+            </div>
+          </div>
+        </div>
       </>
     );
   }

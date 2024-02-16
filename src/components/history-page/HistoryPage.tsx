@@ -25,6 +25,7 @@ const HistoryPage = ({
       description: "You can now view this query on your dashboard",
     });
     fetchDashboardCards();
+    console.log("fetsh")
   };
 
   const handleViewHistory = async (structured_query: any, session: any) => {
