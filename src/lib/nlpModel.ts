@@ -4,22 +4,22 @@ import { HumanMessage } from "@langchain/core/messages";
 import { responseSchema } from "@/query/structuredQuery";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 
-const exampleJson = {
-  "name": "John Doe",
-  "age": 30,
-  "cars": [
-    { "name": "Ford", "models": ["Fiesta", "Focus", "Mustang"] },
-    { "name": "BMW", "models": ["320", "X3", "X5"] },
-    { "name": "Fiat", "models": ["500", "Panda"] }
-  ]
-}
+// const exampleJson = {
+//   "name": "John Doe",
+//   "age": 30,
+//   "cars": [
+//     { "name": "Ford", "models": ["Fiesta", "Focus", "Mustang"] },
+//     { "name": "BMW", "models": ["320", "X3", "X5"] },
+//     { "name": "Fiat", "models": ["500", "Panda"] }
+//   ]
+// }
 
-const loader = new JSONLoader({ data: exampleJson });
+// const loader = new JSONLoader({ data: exampleJson });
 
-const docs = await loader.load();
+// const docs = await loader.load();
 
 
-const parser = new JsonOutputFunctionsParser();
+// const parser = new JsonOutputFunctionsParser();
   
 // Instantiate the ChatOpenAI class
 const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });

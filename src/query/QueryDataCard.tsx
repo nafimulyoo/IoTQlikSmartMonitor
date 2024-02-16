@@ -63,28 +63,28 @@ const QueryDataCard = ({
 
   if (cardEntry) {
     return (
-      <Card className="h-full">
-        <CardHeader>
-          <CardTitle>{JSON.stringify(cardEntry.query_name)}</CardTitle>
-          <Button variant="outline" onClick={() => deleteDashboardCard(cardEntry.card_id)}>X</Button>
-          <CardDescription>
-            {JSON.stringify(cardEntry.structured_query)}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <>
+        <Card className="h-full shadow-2xl overflow-hidden">
+          <CardHeader>
+            <CardTitle>{JSON.stringify(cardEntry.query_name)}</CardTitle>
+            <Button variant="outline" onClick={() => deleteDashboardCard(cardEntry.card_id)}>X</Button>
+            <CardDescription>
+              {JSON.stringify(cardEntry.structured_query)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
 
-          <p>{JSON.stringify(queryData)}</p>
-          <Button variant="outline" onClick={() => setQueryData({})}>Refresh</Button>
-          <Button onClick={() => handleViewCard(queryData)}>View</Button>
-
-          
-        </CardContent>
-      </Card>
+            <p>{JSON.stringify(queryData)}</p>
+            <Button variant="outline" onClick={() => setQueryData({})}>Refresh</Button>
+            <Button onClick={() => handleViewCard(queryData)}>View</Button>
+          </CardContent>
+        </Card>
+      </>
     );
   } else {
     return (
       <>
-        <Card>
+        <Card className="h-full shadow-2xl">
           <CardHeader>
             <CardTitle>Add Query Data</CardTitle>
             <CardDescription>
@@ -94,10 +94,10 @@ const QueryDataCard = ({
           <CardContent>
           <Popover>
               <PopoverTrigger>
-                <Button>Add Query</Button>
+                <Button  className="btn btn-primary bg-gray-700 border-0 hover:bg-gray-800 h-full">Add Query</Button>
               </PopoverTrigger>
-              <PopoverContent>
-                <PopoverClose>
+              <PopoverContent >
+                <PopoverClose >
                   <Button onClick={() => setActiveTab("query")}>New Query</Button>
                   <Button onClick={() => setActiveTab("history")}>Query History</Button>
                 </PopoverClose>

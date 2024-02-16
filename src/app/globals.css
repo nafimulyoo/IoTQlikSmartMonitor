@@ -7,27 +7,34 @@ svg.blobs {
   top: 0;
   left: 0;
   width: 100%;
-  filter: blur(120px);
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
+  filter: blur(100px);
   overflow: visible;
   z-index: -1;
   height: 100vh;
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
+body, html {
+  overflow: hidden;
+}
 
-  100% {
-    transform: rotate(360deg);
-  }
+.fade-bottom {
+  position: relative;
+}
 
-}.in-top{animation:rotate 15s linear infinite;transform-origin:3px 25px}.in-bottom{animation:rotate 15s linear infinite;transform-origin:94px 93px}
+.fade-bottom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5rem;
+  /* Height of the fade effect */
+  background: linear-gradient(to bottom, transparent, #ffffff);
+  /* Start with your div's background color */
+  pointer-events: none;
+  /* Allows clicking through the pseudo-element */
+}
 
 @layer base {
   :root {

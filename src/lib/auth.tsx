@@ -1,4 +1,7 @@
  import axios from 'axios'
+
+
+
  function getSession() {
   if (isUsernameAvailable()) {
     if (!isTokenExpired()) {

@@ -1,21 +1,25 @@
 import QueryDataCard from "@/query/QueryDataCard";
 
+import { AspectRatio } from "@/components/ui/aspectratio"
+
 const DashboardPage = ({ dashboardCards, openModal, session, deleteDashboardCard, setActiveTab }) => {
   const cardProps = { dashboardCards, openModal, session, deleteDashboardCard, setActiveTab };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 w-full">
+    <div className="h-screen">
+
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 w-full h-5/6 mt-6">
       {Array.from({ length: 4 }, (_, index) => (
-        <div key={index} className="w-full flex flex-col">
-          <div className="relative w-full overflow-hidden flex-grow">
-            <QueryDataCard
-              cardNumber={index + 1}
-              className="overflow-auto w-full h-full"
-              {...cardProps}
-            />
-          </div>
-        </div>
+        <AspectRatio key={index} ratio={16 / 5}>
+          <QueryDataCard
+            cardNumber={index + 1}
+            className=""
+            {...cardProps}
+          />
+        </AspectRatio>
       ))}
+    </div>
     </div>
   )
 }

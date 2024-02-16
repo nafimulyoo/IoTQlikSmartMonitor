@@ -46,13 +46,13 @@ const SelectionInput = ({ setInputQuery, inputQuery }: any) => {
   
   return (
     <>
-      <Select value={selection1} onValueChange={(value) => setSelection1(value)}>
+      <Select  value={selection1} onValueChange={(value) => setSelection1(value)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Fruit</SelectLabel>
+            <SelectLabel >Fruit</SelectLabel>
             <SelectItem value="select1">Select 1</SelectItem>
             <SelectItem value="select2">Select 2</SelectItem>
             <SelectItem value="select3">Select 3</SelectItem>

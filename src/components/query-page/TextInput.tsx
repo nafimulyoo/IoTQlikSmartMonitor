@@ -18,8 +18,11 @@ const TextInput = ({ setInputQuery }: any) => {
   
   return (
     <>
-      <Input type="text" onChange={ (e) => setInputText(e.target.value)} value={ inputText }/>
-      <AudioInput setInputText = { setInputText } />
+    <div className="relative mx-4 flex items-center justify-center">
+      <Input className="w-96 max-w-xs h-full" type="text" onChange={ (e) => setInputText(e.target.value)} value={ inputText }/>
+      <AudioInput  setInputText = { setInputText } />
+               
+      </div>
     </>
   )
 }

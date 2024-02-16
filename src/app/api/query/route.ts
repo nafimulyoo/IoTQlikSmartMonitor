@@ -18,8 +18,6 @@ type query = {
 export async function POST(request: Request) {
   const query = await request.json();
   var structuredQuery;
-  console.log("MEMK");
-  console.log(query);
 
   if (!query.session) return new Response("Unauthorized", { status: 401 });
 
