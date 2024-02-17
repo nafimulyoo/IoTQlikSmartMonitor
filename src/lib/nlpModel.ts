@@ -1,34 +1,24 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { HumanMessage } from "@langchain/core/messages";
-import { responseSchema } from "@/query/structuredQuery";
-import { JSONLoader } from "langchain/document_loaders/fs/json";
-
-// const exampleJson = {
-//   "name": "John Doe",
-//   "age": 30,
-//   "cars": [
-//     { "name": "Ford", "models": ["Fiesta", "Focus", "Mustang"] },
-//     { "name": "BMW", "models": ["320", "X3", "X5"] },
-//     { "name": "Fiat", "models": ["500", "Panda"] }
-//   ]
-// }
-
-// const loader = new JSONLoader({ data: exampleJson });
-
-// const docs = await loader.load();
+import { getResponseSchema  } from "@/query/structuredQuery";
+import { JsonOutputFunctionsParser } from "langchain/output_parsers";
+import { getDeviceData } from "./deviceData";
 
 
-// const parser = new JsonOutputFunctionsParser();
-  
-// Instantiate the ChatOpenAI class
-const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });
 
-// Create a new runnable, bind the function to the model, and pipe the output through the parser
+const llm = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });
+const parser = new JsonOutputFunctionsParser();
 
-export default async function convertTextToStructuredQuery(queryText: string) {
+export default async function convertTextToStructuredQuery(queryText: string, session, update) {
   // Create a new runnable, bind the function to the model, and pipe the output through the parser
-  const runnable = model
+
+  const deviceData = await getDeviceData(session, update)
+
+  const deviceDataString = parseDeviceDataToString(deviceData);
+
+  const responseSchema = getResponseSchema(deviceDataString);
+
+  const runnable = llm
     .bind({
       functions: [responseSchema],
       function_call: { name: "responseSchema" },
@@ -40,4 +30,22 @@ export default async function convertTextToStructuredQuery(queryText: string) {
     new HumanMessage(queryText),
   ]);
   return structuredQuery;
+}
+
+
+function parseDeviceDataToString(data) {
+  let deviceDataString = "";
+  data.device.forEach((device) => {
+    // Describing the device and its parameters
+    let deviceDescription = `\n Device '${device.name}' with code '${device.code}' has the following parameters:`;
+    if (device.parameters && device.parameters.parameter) {
+      device.parameters.parameter.forEach((param) => {
+        const paramDescription = ` - Parameter '${param.name}' (Code: ${param.code}, Unit: ${param.unit})`;
+        deviceDescription += `\n${paramDescription}`;
+      });
+    }
+    deviceDataString += deviceDescription;
+  });
+
+  return deviceDataString;
 }

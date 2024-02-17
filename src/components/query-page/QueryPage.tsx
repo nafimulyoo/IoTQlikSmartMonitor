@@ -3,6 +3,8 @@ import SelectionInput from "./SelectionInput";
 import TextInput from "./TextInput";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 interface JSX {
   IntrinsicElements: {
@@ -15,7 +17,12 @@ interface JSX {
 
 const QueryPage = ({ fetchHistory, openModal, session }: any) => {
   const [inputQuery, setInputQuery] = useState({});
+  const [latestDevice, setLatestDevice] = useState(true);
   // send query to server, get response
+    const handleCheckboxChange = () => {
+    setLatestDevice(!latestDevice); // Toggle the value of isChecked
+    console.log(latestDevice);
+  };
 
   const handleQuery = async (inputQuery: any) => {
     const data = await fetch("/api/query", {
@@ -26,6 +33,7 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
       },
       body: JSON.stringify({
         method: "new",
+        update: latestDevice,
         session,
         query_input: inputQuery,
       }),
@@ -47,29 +55,56 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
         </div>
         <Tabs defaultValue="text">
           <div className="w-full flex flex-col items-center mt-16">
-            <TabsList className="w-40 bg-white shadow-xl">
-              <TabsTrigger value="text">Text</TabsTrigger>
+            <TabsList className="h-12 w-32 bg-800 shadow-md">
+              <TabsTrigger className="" value="text">
+                Text
+              </TabsTrigger>
+
               <TabsTrigger value="select">Select</TabsTrigger>
             </TabsList>
           </div>
-          <div className="mt-20">
-          
-          <TabsContent value="text">
-            <TextInput setInputQuery={setInputQuery} inputQuery={inputQuery} >
-            <Button className="mt-4 w-full" onClick={() => handleQuery(inputQuery)}>Query</Button>
-            </TextInput>
-          </TabsContent>
-          <TabsContent value="select">
-            <SelectionInput
-              setInputQuery={setInputQuery}
-              inputQuery={inputQuery}
-            >
-              <Button className="mt-4 w-full" onClick={() => handleQuery(inputQuery)}>Query</Button>
+          <div className="form-control mt-8">
+      <label className="label cursor-pointer">
+        
+        <input 
+          type="checkbox" 
+          checked={latestDevice} 
+          onChange={handleCheckboxChange} // Bind onChange event to handleCheckboxChange function
+          className="checkbox mb-2" 
+        />
+        <span className="label-text mx-4">Update device data</span> 
+      </label>
+    </div>
+          <div className="flex items-center space-x-2">
+
+          </div>
+          <div className="">
+
+            <TabsContent value="text">
+              <TextInput setInputQuery={setInputQuery} inputQuery={inputQuery}>
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() => handleQuery(inputQuery)}
+                >
+                  Query
+                </Button>
+              </TextInput>
+            </TabsContent>
+            <TabsContent value="select" className="flex flex-col items-center">
+              <SelectionInput
+                setInputQuery={setInputQuery}
+                inputQuery={inputQuery}
+              >
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() => handleQuery(inputQuery)}
+                >
+                  Query
+                </Button>
               </SelectionInput>
-          </TabsContent>
+            </TabsContent>
           </div>
         </Tabs>
-        
       </div>
     </>
   );

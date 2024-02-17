@@ -12,7 +12,7 @@
       }
     }
   }
-  return false
+  return "unauthorized"
 }
 
  
@@ -61,6 +61,11 @@ function isUsernameAvailable() {
 }
 
 function isTokenExpired() {
+
+  if (localStorage.getItem('token')) {
+    return false
+  }
+
   const now = new Date()
   const expiration = new Date(localStorage.getItem('expired'))
 

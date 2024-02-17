@@ -19,14 +19,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const HomePage = () => {
+const HomePage = ({ logout }: any) => {
   const { toast } = useToast();
   const [modalVisible, setModalVisible] = useState(false);
   const [history, setHistory]: any = useState([]);
   const [dashboardCards, setDashboardCards] = useState([]);
   const [modalData, setModalData] = useState({});
   const session = useContext(SessionContext);
-
 
   console.log(session);
   const openModal = (modalData: any) => {
@@ -82,13 +81,12 @@ const HomePage = () => {
       fetchDashboardCards();
     }
   }, [session]);
-  
-  const hiddenStyle = { display: 'none' };
 
-  const dashboardStyle = activeTab === 'dashboard' ? {} : hiddenStyle;
-  const queryStyle = activeTab === 'query' ? {} : hiddenStyle;
-  const historyStyle = activeTab === 'history' ? {} : hiddenStyle;
+  const hiddenStyle = { display: "none" };
 
+  const dashboardStyle = activeTab === "dashboard" ? {} : hiddenStyle;
+  const queryStyle = activeTab === "query" ? {} : hiddenStyle;
+  const historyStyle = activeTab === "history" ? {} : hiddenStyle;
 
   if (session) {
     return (
@@ -132,9 +130,9 @@ const HomePage = () => {
             </div>
           </div>
           <div className="navbar-end">
-            <a className=" btn" href="/logout">
+            <Button variant="secondary" onClick={logout}>
               Logout
-            </a>
+            </Button>
           </div>
         </div>
 

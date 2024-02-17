@@ -1,31 +1,33 @@
-'use client'
-import { useEffect, useState } from 'react'
-import AudioInput from './AudioInput'
-import { Input } from '@/components/ui/input'
+"use client";
+import { useEffect, useState } from "react";
+import AudioInput from "./AudioInput";
+import { Input } from "@/components/ui/input";
 
 const TextInput = ({ setInputQuery, children }: any) => {
+  const [inputText, setInputText] = useState("");
 
-  const [inputText, setInputText] = useState("")
-  
-  
   useEffect(() => {
     const newInputQuery = {
       type: "text",
-      query_input : inputText,
-    }; 
+      query_input: inputText,
+    };
     setInputQuery(newInputQuery);
-  }, [inputText])
-  
+  }, [inputText]);
+
   return (
     <>
-    <div className="w-96 relative flex flex-row items-center justify-center  h-full">
-      <Input className=" h-12 text-md mx-2" type="text" onChange={ (e) => setInputText(e.target.value)} value={ inputText }/>
-      <AudioInput setInputText = { setInputText } />    
-      
+      <div className="w-96 relative flex flex-row items-center justify-center  h-full">
+        <Input
+          className="h-12 text-md mx-2"
+          type="text"
+          onChange={(e) => setInputText(e.target.value)}
+          value={inputText}
+        />
+        <AudioInput setInputText={setInputText} />
       </div>
       {children}
     </>
-  )
-}
+  );
+};
 
-export default TextInput
+export default TextInput;

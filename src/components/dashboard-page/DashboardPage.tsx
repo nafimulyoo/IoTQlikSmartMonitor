@@ -1,6 +1,6 @@
 import QueryDataCard from "@/query/QueryDataCard";
 
-import { AspectRatio } from "@/components/ui/aspectratio"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 
 const DashboardPage = ({ dashboardCards, openModal, session, deleteDashboardCard, setActiveTab }) => {
   const cardProps = { dashboardCards, openModal, session, deleteDashboardCard, setActiveTab };

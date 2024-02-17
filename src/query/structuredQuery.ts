@@ -1,5 +1,10 @@
 const baseUrl = "iot.ayou.id/api";
-const getUrlFromStructuredQuery = (structuredQuery: any, token: string, site: string, username: string) => {
+const getUrlFromStructuredQuery = (
+  structuredQuery: any,
+  token: string,
+  site: string,
+  username: string
+) => {
   let url;
 
   switch (structuredQuery.query_type) {
@@ -20,9 +25,12 @@ const getUrlFromStructuredQuery = (structuredQuery: any, token: string, site: st
     case "data-log":
       url = new URL(`https://${baseUrl}/datalog`);
       url.searchParams.append("device", structuredQuery.device_code);
-      url.searchParams.append("param", structuredQuery.parameters.join(","));
-      url.searchParams.append("from", structuredQuery.from_time);
-      url.searchParams.append("to", structuredQuery.to_time);
+      const parameters = structuredQuery.parameters.split(",");
+      for (let param of parameters) {
+        url.searchParams.append("param[]", param);
+      }
+      url.searchParams.append("from", structuredQuery.from_time + " 00:00:00");
+      url.searchParams.append("to", structuredQuery.to_time + " 00:00:00");
       break;
     default:
       throw new Error("Unsupported query type");
@@ -36,6 +44,7 @@ const getUrlFromStructuredQuery = (structuredQuery: any, token: string, site: st
   return url.href;
 };
 
+const getResponseSchema = (deviceData: string) => {
 const responseSchema = {
   name: "responseSchema",
   description:
@@ -47,6 +56,10 @@ const responseSchema = {
         type: "string",
         description:
           "Indicates the status of the response: 'success' if the response is successful and according to plan. If failed, a string is returned to explain why the operation failed.",
+      },
+      query_name: {
+        type: "string",
+        description: "Enter a concise, memorable name for your query. Choose up to three words that summarize the querys purpose or content, such as [Device Name] Voltage Readings, Alarm Log, or Weekly Voltage History. A well-chosen name helps you easily identify and refer back to the query in the future.",
       },
       query_type: {
         type: "string",
@@ -62,7 +75,7 @@ const responseSchema = {
       device_code: {
         type: "string",
         description:
-          "If applicable, contains the device code based on user input and data. Empty string if not applicable.",
+          `If applicable, contains the device code based on user input and data. Empty string if not applicable. This is the device data and parameter data ${deviceData}`
       },
       parameters: {
         type: "string",
@@ -80,8 +93,11 @@ const responseSchema = {
           "For 'data-log' queries, contains the ending time in the format YYYY-MM-DD HH:MM:SSS. Empty string if not applicable.",
       },
     },
-    required: ["status", "query_type"],
+    required: ["status", "query_name", "query_type"],
+
   },
 };
+  return responseSchema;
+}
 
-export { getUrlFromStructuredQuery, responseSchema };
+export { getUrlFromStructuredQuery, getResponseSchema };

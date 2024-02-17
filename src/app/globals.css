@@ -15,7 +15,7 @@ svg.blobs {
 }
 
 body, html {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .fade-bottom {
