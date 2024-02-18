@@ -30,8 +30,11 @@ const getUrlFromStructuredQuery = (
       for (let param of parameters) {
         url.searchParams.append("param[]", param);
       }
-      url.searchParams.append("from", structuredQuery.from_time + " 00:00:00");
-      url.searchParams.append("to", structuredQuery.to_time + " 23:59:59");
+      const from_time = structuredQuery.from_time + " 00:00:00"
+      const to_time = structuredQuery.to_time + " 00:00:00"
+      console.log(from_time, to_time);
+      url.searchParams.append("from", from_time);
+      url.searchParams.append("to", to_time);
       break;
     default:
       throw new Error("Unsupported query type");

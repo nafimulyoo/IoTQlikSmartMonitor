@@ -31,6 +31,7 @@ const HomePage = ({ logout }: any) => {
   const openModal = (modalData: any) => {
     setModalData(modalData);
     setModalVisible(true);
+    console.log("modalData", modalData);
   };
   const [activeTab, setActiveTab] = useState("dashboard");
 

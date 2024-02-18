@@ -13,7 +13,7 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
   };
 
   const handleQuery = async (inputQuery: any) => {
-    const data = await fetch("/api/query", {
+    const output_data = await fetch("/api/query", {
       method: "POST",
       next: { revalidate: 3600 },
       headers: {
@@ -27,7 +27,7 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
       }),
     }).then((res) => res.json());
 
-    openModal(data);
+    openModal(output_data);
     fetchHistory();
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
     modalElement?.showModal();

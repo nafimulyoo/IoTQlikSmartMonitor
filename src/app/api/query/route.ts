@@ -58,7 +58,9 @@ export async function POST(request: Request) {
 
 
   const jsonString = data.data.substring(data.data.indexOf("{"));
-  const query_result = JSON.parse(jsonString);
+  const apiData = JSON.parse(jsonString);
+  // add structured query to the result
+  const query_result = { ...apiData, query_type: structuredQuery.query_type };
 
   return new Response(JSON.stringify(query_result), {
     headers: { "content-type": "application/json" },
