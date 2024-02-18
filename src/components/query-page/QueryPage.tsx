@@ -3,25 +3,13 @@ import SelectionInput from "./SelectionInput";
 import TextInput from "./TextInput";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-
-interface JSX {
-  IntrinsicElements: {
-    input: React.DetailedHTMLProps<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      HTMLInputElement
-    >;
-  };
-}
 
 const QueryPage = ({ fetchHistory, openModal, session }: any) => {
   const [inputQuery, setInputQuery] = useState({});
   const [latestDevice, setLatestDevice] = useState(true);
   // send query to server, get response
-    const handleCheckboxChange = () => {
+  const handleCheckboxChange = () => {
     setLatestDevice(!latestDevice); // Toggle the value of isChecked
-    console.log(latestDevice);
   };
 
   const handleQuery = async (inputQuery: any) => {
@@ -33,7 +21,7 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
       },
       body: JSON.stringify({
         method: "new",
-        update: latestDevice,
+        updateDevice: latestDevice,
         session,
         query_input: inputQuery,
       }),
@@ -59,29 +47,24 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
               <TabsTrigger className="" value="text">
                 Text
               </TabsTrigger>
-
               <TabsTrigger value="select">Select</TabsTrigger>
             </TabsList>
           </div>
-          <div className="form-control mt-8">
-      <label className="label cursor-pointer">
-        
-        <input 
-          type="checkbox" 
-          checked={latestDevice} 
-          onChange={handleCheckboxChange} // Bind onChange event to handleCheckboxChange function
-          className="checkbox mb-2" 
-        />
-        <span className="label-text mx-4">Update device data</span> 
-      </label>
-    </div>
-          <div className="flex items-center space-x-2">
-
-          </div>
-          <div className="">
-
+          <div className="mt-4">
+          <div className="form-control flex flex-row items-center justify-center">
+                  <label className="label cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={latestDevice}
+                      onChange={handleCheckboxChange}
+                      className="checkbox"
+                    />
+                    <span className="label-text ml-2">Update device data</span>
+                  </label>
+                </div>
             <TabsContent value="text">
               <TextInput setInputQuery={setInputQuery} inputQuery={inputQuery}>
+
                 <Button
                   className="mt-4 w-full"
                   onClick={() => handleQuery(inputQuery)}
@@ -90,18 +73,23 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
                 </Button>
               </TextInput>
             </TabsContent>
-            <TabsContent value="select" className="flex flex-col items-center">
+            <TabsContent value="select">
+
+                <div className="flex flex-col items-center">
+                  
               <SelectionInput
                 setInputQuery={setInputQuery}
                 inputQuery={inputQuery}
-              >
+                session={session}
+                >
                 <Button
                   className="mt-4 w-full"
                   onClick={() => handleQuery(inputQuery)}
-                >
+                  >
                   Query
                 </Button>
               </SelectionInput>
+                  </div>
             </TabsContent>
           </div>
         </Tabs>

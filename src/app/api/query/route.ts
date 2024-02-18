@@ -17,11 +17,11 @@ export async function POST(request: Request) {
       structuredQuery = await convertTextToStructuredQuery(
         query.query_input.query_input,
         query.session,
-        query.update
+        query.updateDevice
       );
-    } else if (query.method === "select") {
-      structuredQuery = query.query_input.query_input;
-      
+    } else if (query.query_input.type === "select") {
+      structuredQuery = query.query_input.query_selection;
+      console.log("structuredQuery", structuredQuery);
     }
     const { error } = await supabase
     .from("Query History")

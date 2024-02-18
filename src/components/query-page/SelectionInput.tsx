@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -22,77 +22,128 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const SelectionInput = ({ setInputQuery, inputQuery, children }: any) => {
-  const [selection1, setSelection1] = useState("");
-  const [selection2, setSelection2] = useState("");
-  const [selection3, setSelection3] = useState("");
+const SelectionInput =  ({ setInputQuery, inputQuery, children, session }: any) => {
+  const [queryType, setQueryType] = useState("");
+  const [deviceCode, setDeviceCode] = useState("");
+  const [parameterCode, setParameterCode] = useState("");
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: addDays(new Date(), -1),
+    to: new Date()
   });
+
+  const [deviceData, setDeviceData] = useState({})
+  const [parameters, setParameters] = useState([])
+
+
+  async function getDeviceData() {
+    const data = await fetch("/api/data/devices", {
+      method: "POST",
+      next: { revalidate: 3600 },
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        session,
+        update: false
+      }),
+    }).then((res) => res.json());
+    console.log(data);
+    setDeviceData(data);
+  }
+
+  useEffect(() => {
+    getDeviceData();
+  }, []);
+
+  useEffect(() => {
+    if (deviceCode) {
+      const selectedDeviceData = deviceData.device.find(device => device.code === deviceCode);
+      if (selectedDeviceData) {
+        setParameters(selectedDeviceData.parameters.parameter)
+        console.log(selectedDeviceData.parameters.parameter);
+      }
+    }
+  }, [deviceCode]);
+
+
   useEffect(() => {
     const newInputQuery = {
       type: "select",
-      query_input: {
-        value1: selection1,
-        value2: selection2,
-        value3: selection3,
+      query_selection: {
+        query_name: "name",
+        query_type: queryType,
+        device_code: deviceCode,
+        parameters: parameterCode,
+        from_time: format(date?.from, 'yyyy-MM-dd'),
+        to_time: format(date?.to, 'yyyy-MM-dd'),
       },
     };
+
     console.log(newInputQuery);
     setInputQuery(newInputQuery);
-  }, [selection1, selection2, selection3]);
+  }, [queryType, deviceCode, parameterCode, date]);
 
   return (
     <>
       <div className="flex flex-row">
         <Select
-          value={selection1}
-          onValueChange={(value) => setSelection1(value)}
+          value={queryType}
+          onValueChange={(value) => setQueryType(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a fruit" />
+            <SelectValue placeholder="Select query type" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Fruit</SelectLabel>
-              <SelectItem value="select1">Select 1</SelectItem>
-              <SelectItem value="select2">Select 2</SelectItem>
-              <SelectItem value="select3">Select 3</SelectItem>
+              <SelectLabel>Query Type</SelectLabel>
+              <SelectItem value="data-last">Last Data</SelectItem>
+              <SelectItem value="data-log">Data Log</SelectItem>
+              <SelectItem value="device-list">Device List</SelectItem>
+              <SelectItem value="parameter-list">Parameter List</SelectItem>
+              <SelectItem value="alarm-log">Alarm Log</SelectItem>
             </SelectGroup>
           </SelectContent>
+
         </Select>
 
         <Select
-          value={selection2}
-          onValueChange={(value) => setSelection2(value)}
+          value={deviceCode}
+          onValueChange={(value) => setDeviceCode(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a fish" />
+            <SelectValue placeholder="Select device name" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Fish</SelectLabel>
-              <SelectItem value="select1">Select 1</SelectItem>
-              <SelectItem value="select2">Select 2</SelectItem>
-              <SelectItem value="select3">Select 3</SelectItem>
+              <SelectLabel>Device Name</SelectLabel>
+              {
+                deviceData && deviceData.device?.map((device: any) => (
+                  <SelectItem key={device.code} value={device.code}>
+                    {device.name}
+                  </SelectItem>
+                ))
+              }
             </SelectGroup>
           </SelectContent>
-        </Select>
 
+        </Select>
         <Select
-          value={selection3}
-          onValueChange={(value) => setSelection3(value)}
+          value={parameterCode}
+          onValueChange={(value) => setParameterCode(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a item" />
+            <SelectValue placeholder="Select parameter" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Item</SelectLabel>
-              <SelectItem value="select1">Select 1</SelectItem>
-              <SelectItem value="select2">Select 2</SelectItem>
-              <SelectItem value="select3">Select 3</SelectItem>
+              <SelectLabel>Parameter</SelectLabel>
+              {
+                parameters && parameters?.map((parameter: any) => (
+                  <SelectItem key={parameter.code} value={parameter.code}>
+                    {parameter.name}
+                  </SelectItem>
+                ))
+              }
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -126,7 +177,7 @@ const SelectionInput = ({ setInputQuery, inputQuery, children }: any) => {
               <Calendar
                 initialFocus
                 mode="range"
-                defaultMonth={date?.from}
+                // defaultMonth={date?.from}
                 selected={date}
                 onSelect={setDate}
                 numberOfMonths={2}

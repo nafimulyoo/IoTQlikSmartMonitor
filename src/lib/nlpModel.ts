@@ -9,10 +9,10 @@ import { getDeviceData } from "./deviceData";
 const llm = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });
 const parser = new JsonOutputFunctionsParser();
 
-export default async function convertTextToStructuredQuery(queryText: string, session, update) {
+export default async function convertTextToStructuredQuery(queryText: string, session,  updateDevice) {
   // Create a new runnable, bind the function to the model, and pipe the output through the parser
 
-  const deviceData = await getDeviceData(session, update)
+  const deviceData = await getDeviceData(session,  updateDevice)
 
   const deviceDataString = parseDeviceDataToString(deviceData);
 

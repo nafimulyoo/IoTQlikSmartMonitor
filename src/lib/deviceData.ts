@@ -2,8 +2,9 @@ import { supabase } from "@/lib/initSupabase";
 import axios from "axios"
 
 
-export async function getDeviceData(session, update = false) {
-    if (!update) {
+export async function getDeviceData(session, updateDevice = false) {
+    if (!updateDevice) {
+
       let { data: savedData, error } = await supabase
         .from("Device Data")
         .select("*")
@@ -17,6 +18,7 @@ export async function getDeviceData(session, update = false) {
       }
   
       if (savedData && savedData.device_data) {
+        console.log("Using saved device data");
         return savedData.device_data;
       }
     }

@@ -18,7 +18,7 @@ const TextInput = ({ setInputQuery, children }: any) => {
     <>
       <div className="w-96 relative flex flex-row items-center justify-center  h-full">
         <Input
-          className="h-12 text-md mx-2"
+          className="h-12 text-md mr-2"
           type="text"
           onChange={(e) => setInputText(e.target.value)}
           value={inputText}

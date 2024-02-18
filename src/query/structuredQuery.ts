@@ -1,3 +1,4 @@
+
 const baseUrl = "iot.ayou.id/api";
 const getUrlFromStructuredQuery = (
   structuredQuery: any,
@@ -30,7 +31,7 @@ const getUrlFromStructuredQuery = (
         url.searchParams.append("param[]", param);
       }
       url.searchParams.append("from", structuredQuery.from_time + " 00:00:00");
-      url.searchParams.append("to", structuredQuery.to_time + " 00:00:00");
+      url.searchParams.append("to", structuredQuery.to_time + " 23:59:59");
       break;
     default:
       throw new Error("Unsupported query type");
@@ -43,6 +44,77 @@ const getUrlFromStructuredQuery = (
   console.log(url.href);
   return url.href;
 };
+
+// function getSelection(session)  {
+//   const structuredQuerySelection =  {
+//     label: 'Query Type',
+//     value: '',
+//     children: [
+//       {
+//         label: 'Device List',
+//         value: 'device-list',
+//         children: []
+//       },
+//       {
+//         label: 'Parameter List',
+//         value: 'parameter-list',
+//         children: [
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [] },
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [] },
+//         ]
+//       },
+//       {
+//         label: 'Data Last',
+//         value: 'data-last',
+//         children: [
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [] },
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [] },
+//         ]
+//       },
+//       {
+//         label: 'Alarm Log',
+//         value: 'alarm-log',
+//         children: []
+//       },
+//       {
+//         label: 'Data Log',
+//         value: 'data-log',
+//         children: [
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [
+//               { 
+//                 label: 'Voltage',
+//                 value: 'voltage',
+//                 children: []
+//               }
+//             ] },
+//           { label: 'Incoming PLN', 
+//             value: 'mcdpm1', 
+//             children: [
+//               { 
+//                 label: 'Voltage',
+//                 value: 'voltage',
+//                 children: []
+//               }
+//             ]
+//           },
+//         ]
+//       }
+//     ]
+//   }
+//   return structuredQuerySelection;
+// }
+// for branching selection
+
 
 const getResponseSchema = (deviceData: string) => {
 const responseSchema = {
@@ -100,4 +172,7 @@ const responseSchema = {
   return responseSchema;
 }
 
-export { getUrlFromStructuredQuery, getResponseSchema };
+export { getUrlFromStructuredQuery, getResponseSchema
+  // , 
+  // getSelection 
+};
