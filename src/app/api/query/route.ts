@@ -31,6 +31,7 @@ export async function POST(request: Request) {
          query_name: structuredQuery.query_name,
          structured_query: structuredQuery,
        });
+
      if (error) {
        console.error("Error saving structured query to supabase:", error);
        throw new Error("Error saving structured query");

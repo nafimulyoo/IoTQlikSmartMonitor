@@ -7,12 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  PopoverClose,
-} from "@/components/ui/popover";
+import QueryDataModal from "./QueryDataModal";
 
 const QueryDataCard = ({
   dashboardCards,
@@ -57,7 +52,10 @@ const QueryDataCard = ({
   }, [dashboardCards, queryData]);
 
   const handleViewCard = async (queryData: any) => {
-    openModal(queryData);
+    openModal(
+      {data: queryData,
+      structured_query: cardEntry.structured_query}
+    );
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
     modalElement?.showModal();
   };
@@ -79,7 +77,8 @@ const QueryDataCard = ({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p>{JSON.stringify(queryData)}</p>
+            {/* <QueryDataModal queryData={queryData} /> */}
+
             <Button variant="outline" onClick={() => setQueryData({})}>
               Refresh
             </Button>
@@ -93,13 +92,13 @@ const QueryDataCard = ({
       <>
         <div class="dropdown border-gray-700 border-2 border-dotted w-full h-full grid card  rounded-box place-items-center border-opacity-50">
           <Button>
-            <span class="text-xl font-bold mb-0.5">+</span> Add Data
+            <span className="text-xl font-bold mb-0.5">+</span> Add Data
           </Button>
           <div
-            tabindex="0"
-            class="dropdown-content z-[2] card card-compact w-64 p-2 bg-base-100 shadow-md"
+            tabIndex={0}
+            className="dropdown-content z-[2] card card-compact w-64 p-2 bg-base-100 shadow-md"
           >
-            <div class="card-body">
+            <div className="card-body">
               <Button onClick={() => setActiveTab("query")}>New Query</Button>
               <Button onClick={() => setActiveTab("history")}>
                 Query History

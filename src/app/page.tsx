@@ -3,15 +3,23 @@
 import React, { createContext, useState, useEffect } from "react";
 import HomePage from "@/components/HomePage";
 import LoginPage from "@/components/LoginPage";
-import { getSession } from "@/lib/auth";
+import { getSession, logout } from "@/lib/auth";
+import { useToast } from "@/components/ui/use-toast";
 
 export const SessionContext = createContext(null);
 
-export default function Page() {
+export default  function Page() {
   const [session, setSession] = useState(null);
+  const { toast } = useToast();
 
-  const logout = async () => {
-    setSession("unauthorized");
+  const handleLogout = () => {
+    const status = logout();
+    setSession(status);
+    toast({
+      title: `Logout successful`,
+      description: "You have successfully logged out",
+
+    });
   }
 
   useEffect(() => {
@@ -22,10 +30,10 @@ export default function Page() {
 
 return (
   session === "unauthorized" ? 
-    <LoginPage /> :
+    <LoginPage setSession={ setSession } /> :
     session ? (
       <SessionContext.Provider value={session}>
-        <HomePage logout={logout} />
+        <HomePage logout={handleLogout} />
       </SessionContext.Provider>
     ) : (
       <div className="flex items-center justify-center min-h-screen">

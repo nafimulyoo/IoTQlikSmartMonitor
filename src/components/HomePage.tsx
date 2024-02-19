@@ -12,11 +12,6 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogClose,
-  DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 
 const HomePage = ({ logout }: any) => {
@@ -28,8 +23,8 @@ const HomePage = ({ logout }: any) => {
   const session = useContext(SessionContext);
 
   console.log(session);
-  const openModal = (modalData: any) => {
-    setModalData(modalData);
+  const openModal = (modal_data: any) => {
+    setModalData(modal_data);
     setModalVisible(true);
     console.log("modalData", modalData);
   };
@@ -45,7 +40,8 @@ const HomePage = ({ logout }: any) => {
     const { data, error }: any = await supabase
       .from("Query History")
       .select("*")
-      .eq("username", session.username);
+      .eq("username", session.username)
+      .order("created_at", { ascending: false });
     if (error) console.log("error", error);
     else setHistory(data);
   };
@@ -89,105 +85,89 @@ const HomePage = ({ logout }: any) => {
   const queryStyle = activeTab === "query" ? {} : hiddenStyle;
   const historyStyle = activeTab === "history" ? {} : hiddenStyle;
 
-  if (session) {
-    return (
-      <>
-        <div className="z-10 absolute navbar shadow-none ">
-          <div className="navbar-start">
-            <p className="text-xl font-semibold ml-4 ">IOTkliq Smart Monitor</p>
-          </div>
-          <div className="navbar-center">
-            <div role="tablist" className="tabs tabs-bordered">
-              <input
-                type="radio"
-                name="main_tab"
-                role="tab"
-                className="tab"
-                aria-label="Dashboard"
-                value="dashboard"
-                checked={activeTab === "dashboard"}
-                onChange={handleTabChange}
-              />
-              <input
-                type="radio"
-                name="main_tab"
-                role="tab"
-                className="tab mx-6"
-                aria-label="Query"
-                checked={activeTab === "query"}
-                onChange={handleTabChange}
-                value="query"
-              />
-              <input
-                type="radio"
-                name="main_tab"
-                role="tab"
-                className="tab"
-                aria-label="History"
-                checked={activeTab === "history"}
-                onChange={handleTabChange}
-                value="history"
-              />
-            </div>
-          </div>
-          <div className="navbar-end">
-            <Button variant="secondary" onClick={logout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-
-        {/* Modal for Viewing Query Data */}
-        <Dialog open={modalVisible} onOpenChange={() => setModalVisible}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Query Data</DialogTitle>
-              <DialogDescription>
-                Data returned from the querys
-              </DialogDescription>
-            </DialogHeader>
-            <QueryModalData modalData={modalData} />
-            <DialogClose asChild>
-              <Button onClick={() => setModalVisible(false)}>Close</Button>
-            </DialogClose>
-          </DialogContent>
-        </Dialog>
-
-        {/* Tab Content */}
-
-        <div className="p-10" style={dashboardStyle}>
-          <DashboardPage
-            dashboardCards={dashboardCards}
-            deleteDashboardCard={deleteDashboardCard}
-            openModal={openModal}
-            session={session}
-            setActiveTab={setActiveTab}
-          />
-        </div>
-
-        <div className="pt-10" style={queryStyle}>
-          <QueryPage
-            fetchHistory={fetchHistory}
-            openModal={openModal}
-            session={session}
-          />
-        </div>
-
-        <div className="pt-10" style={historyStyle}>
-          <HistoryPage
-            history={history}
-            openModal={openModal}
-            session={session}
-            fetchDashboardCards={fetchDashboardCards}
-          />
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
-      <h1>Loading...</h1>
+      <div className="z-10 absolute navbar shadow-none ">
+        <div className="navbar-start">
+          <p className="text-xl font-semibold ml-4 ">IOTkliq Smart Monitor</p>
+        </div>
+        <div className="navbar-center">
+          <div role="tablist" className="tabs tabs-bordered">
+            <input
+              type="radio"
+              name="main_tab"
+              role="tab"
+              className="tab"
+              aria-label="Dashboard"
+              value="dashboard"
+              checked={activeTab === "dashboard"}
+              onChange={handleTabChange}
+            />
+            <input
+              type="radio"
+              name="main_tab"
+              role="tab"
+              className="tab mx-6"
+              aria-label="Query"
+              checked={activeTab === "query"}
+              onChange={handleTabChange}
+              value="query"
+            />
+            <input
+              type="radio"
+              name="main_tab"
+              role="tab"
+              className="tab"
+              aria-label="History"
+              checked={activeTab === "history"}
+              onChange={handleTabChange}
+              value="history"
+            />
+          </div>
+        </div>
+        <div className="navbar-end">
+          <Button variant="secondary" onClick={logout}>
+            Logout
+          </Button>
+        </div>
+      </div>
+
+      {/* Modal for Viewing Query Data */}
+      <Dialog open={modalVisible} onOpenChange={() => setModalVisible}>
+        <QueryModalData className="w-full h-full" modalInput={modalData}>
+
+            <Button onClick={() => setModalVisible(false)}>Close</Button>
+        </QueryModalData>
+      </Dialog>
+
+      {/* Tab Content */}
+
+      <div className="p-10" style={dashboardStyle}>
+        <DashboardPage
+          dashboardCards={dashboardCards}
+          deleteDashboardCard={deleteDashboardCard}
+          openModal={openModal}
+          session={session}
+          setActiveTab={setActiveTab}
+        />
+      </div>
+
+      <div className="pt-10" style={queryStyle}>
+        <QueryPage
+          fetchHistory={fetchHistory}
+          openModal={openModal}
+          session={session}
+        />
+      </div>
+
+      <div className="pt-10" style={historyStyle}>
+        <HistoryPage
+          history={history}
+          openModal={openModal}
+          session={session}
+          fetchDashboardCards={fetchDashboardCards}
+        />
+      </div>
     </>
   );
 };

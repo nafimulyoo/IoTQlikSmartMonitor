@@ -44,8 +44,12 @@ const HistoryPage = ({
       }),
     }).then((res) => res.json());
 
+    
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
-    openModal(newModalData);
+    openModal(
+      {data: newModalData,
+      structured_query: structured_query}
+    );
     modalElement?.showModal();
   };
 
@@ -67,7 +71,7 @@ const HistoryPage = ({
               <tbody>
                 {history.map((history: any) => (
                   <tr key={history.id}>
-                    <td>{history.created_at}</td>
+                    <td>{new Date(history.created_at).toLocaleString()}</td>
                     <td>{history.query_name}</td>
                     <td className="pl-20 pr-2 mr-2">
                       <div className="dropdown">
@@ -75,7 +79,7 @@ const HistoryPage = ({
                           Add to Dashboard
                         </Button>
                         <div
-                          tabindex="0"
+                          tabIndex={1}
                           className="dropdown-content z-[2] card card-compact w-52 p-2 bg-base-100 shadow-md"
                         >
                           <div className="card-body flex flex-col w-48">

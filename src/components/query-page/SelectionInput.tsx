@@ -78,7 +78,7 @@ const SelectionInput = ({
     const newInputQuery = {
       type: "select",
       query_selection: {
-        query_name: queryName,
+        query_name: queryName || "Unnamed",
         query_type: queryType,
         device_code: deviceCode,
         parameters: parameterCode,

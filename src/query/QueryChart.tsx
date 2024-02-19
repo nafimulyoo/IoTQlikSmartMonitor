@@ -29,7 +29,6 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
     },
   },
 };
@@ -37,7 +36,8 @@ export const options = {
 
 
 export default function QueryChart({ data }) {
-  const labels = data.datalog.map((data) => data.created_at);
+  const labels = data.datalog.map((data) =>  new Date(data.created_at).toLocaleString());
+  
 
   const chartData = {
   labels,

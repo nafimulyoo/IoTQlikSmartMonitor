@@ -1,11 +1,20 @@
  import axios from 'axios'
 
 
+ function logout() {
+  localStorage.removeItem('token')
+  localStorage.removeItem('site')
+  localStorage.removeItem('username')
+  localStorage.removeItem('expired')
+  return "unauthorized"
+ }
+
 
  function getSession() {
   if (isUsernameAvailable()) {
     if (!isTokenExpired()) {
       return {
+        status: "authorized",
         token: localStorage.getItem('token'),
         site: localStorage.getItem('site'),
         username: localStorage.getItem('username'),
@@ -21,6 +30,8 @@
 
     const username = formData.get('username').toString()
     const password = formData.get('password').toString()
+
+
 
     const url = new URL('https://iot.ayou.id/api/login')
     url.searchParams.append('user', username)
@@ -43,12 +54,18 @@
     localStorage.setItem('site', authData.site)
     localStorage.setItem('username', username)
     localStorage.setItem('expired', authData.expired)
-    window.location.reload()
-    return "success"
+    console.log("login authorized")
+    return {
+      status: "authorized",
+      token: authData.token,
+      site: authData.site,
+      username: username,
+    }
   }
   catch (error) {
-    console.error(error)
-    return null
+    return {
+      status: "unauthorized",
+    }
   }
 }
 
@@ -77,4 +94,4 @@ function isTokenExpired() {
 }
 
 
-export { getSession, login }
+export { getSession, login, logout }

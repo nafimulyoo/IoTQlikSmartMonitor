@@ -155,7 +155,7 @@ const responseSchema = {
       parameters: {
         type: "string",
         description:
-          "If the query type is 'data-log', contains the parameter code. Empty string if not applicable.",
+          "If the query type is 'data-log', contains the parameter code. Empty string if not applicable, only get one parameter.",
       },
       from_time: {
         type: "string",
