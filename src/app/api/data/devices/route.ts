@@ -1,5 +1,3 @@
-import axios from "axios";
-import { supabase } from "@/lib/initSupabase";
 import { getDeviceData } from "@/lib/deviceData";
 
 export async function POST(request: Request) {

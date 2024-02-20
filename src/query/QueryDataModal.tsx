@@ -15,14 +15,16 @@ const QueryDataModal = ({ modalInput, children }: any) => {
   const data = modalInput?.data;
   const structured_query = modalInput?.structured_query;
   const query_type = data?.query_type;
-  console.log("AAA")
-  console.log(modalInput)
+  
+  
   if (query_type === "alarm-log") {
     return (
       <DialogContent className=" max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {structured_query.query_name}
+            {
+            structured_query?.query_name
+            }
           </DialogTitle>
           <DialogDescription>
             Alarm Log Data returned from the querys

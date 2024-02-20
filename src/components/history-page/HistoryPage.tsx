@@ -1,5 +1,4 @@
 "use client";
-import { supabase } from "@/lib/initSupabase";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -12,13 +11,24 @@ const HistoryPage = ({
 }: any) => {
   const { toast } = useToast();
   const handleAddToDashboard = async (history: any, card_id: number) => {
-    const { data, error }: any = await supabase.from("Dashboard Card").upsert({
-      username: session.username,
-      card_id: card_id,
-      created_at: new Date(),
-      query_name: history.query_name,
-      structured_query: history.structured_query,
-    });
+    // use fetch
+    const { data, error } = await fetch("/api/data/dashboard/add", {
+      method: "POST",
+      next: {
+        revalidate: 3600
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: session.username,
+        card_id: card_id,
+        created_at: new Date(),
+        query_name: history.query_name,
+        structured_query: history.structured_query,
+      })
+    }).then(res => res.json());
+      
     toast({
       title: `${history.query_name} added to dashboard`,
       description: "You can now view this query on your dashboard",

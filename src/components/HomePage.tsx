@@ -4,7 +4,6 @@ import DashboardPage from "@/components/dashboard-page/DashboardPage";
 import HistoryPage from "@/components/history-page/HistoryPage";
 import QueryPage from "@/components/query-page/QueryPage";
 import { useState, useEffect, useContext } from "react";
-import { supabase } from "@/lib/initSupabase";
 import QueryModalData from "@/query/QueryDataModal";
 import { SessionContext } from "@/app/page";
 
@@ -37,33 +36,56 @@ const HomePage = ({ logout }: any) => {
 
   const fetchHistory = async () => {
     
-    const { data, error }: any = await supabase
-      .from("Query History")
-      .select("*")
-      .eq("username", session.username)
-      .order("created_at", { ascending: false });
+    const { data, error }: any = await fetch("/api/data/history", {
+      method: "POST",
+      next: {
+        revalidate: 3600
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: session.username
+      })
+    }).then(res => res.json());
+
     if (error) console.log(error)
     else setHistory(data);
-  };
+  }; 
 
   const fetchDashboardCards = async () => {
-    const { data, error }: any = await supabase
-
-      .from("Dashboard Card")
-      .select("*")
-      .eq("username", session.username);
+    const { data, error }: any = await fetch("/api/data/dashboard/get", {
+      method: "POST",
+      next: {
+        revalidate: 3600
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: session.username
+      })
+    }).then(res => res.json());
 
     if (error) console.log(error);
     else setDashboardCards(data);
   };
 
   const deleteDashboardCard = async (id: number) => {
+    const { error } = await fetch("/api/data/dashboard/remove", {
+      method: "POST",
+      next: {
+        revalidate: 3600
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: session.username,
+        card_id: id,
+      })
+    }).then(res => res.json());
     
-    const { error }: any = await supabase
-      .from("Dashboard Card")
-      .delete()
-      .eq("username", session.username)
-      .eq("card_id", id);
     toast({
       variant: "destructive",
       title: `Card removed to dashboard`,

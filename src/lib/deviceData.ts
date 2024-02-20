@@ -13,16 +13,16 @@ export async function getDeviceData(session, updateDevice = false) {
 
   
       if (error) {
-        
+        console.error("Error fetching device data from supabase:", error);
         throw new Error("Error fetching device data");
       }
   
       if (savedData && savedData.device_data) {
-        
+        console.log("Using saved device data");
         return savedData.device_data;
       }
     }
-    
+    console.log("Fetching and saving device data");
     const deviceData = await fetchAndSaveDeviceData(session);
     return deviceData;
   }
@@ -41,8 +41,8 @@ export async function getDeviceData(session, updateDevice = false) {
       );
       const deviceListJsonValue = JSON.parse(jsonString);
   
-      
-      
+      console.log("Device List JSON Value:");
+      console.log(deviceListJsonValue);
   
       for (let device of deviceListJsonValue.device) {
         const deviceCode = device.code;
@@ -74,12 +74,12 @@ export async function getDeviceData(session, updateDevice = false) {
         device_data: deviceListJsonValue,
       });
       if (error) {
-        
+        console.error("Error saving device data to supabase:", error);
         throw new Error("Error saving device data");
       }
       return deviceListJsonValue;
     } catch (error) {
-      
+      console.error(`Error fetching device list: ${error}`);
       throw new Error("Error fetching device list");
     }
   }

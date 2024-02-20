@@ -27,7 +27,10 @@ const QueryPage = ({ fetchHistory, openModal, session }: any) => {
       }),
     }).then((res) => res.json());
 
-    openModal(output_data);
+    openModal(
+      {data: output_data,
+        structured_query: null}
+    );
     fetchHistory();
     const modalElement = document.getElementById("modal") as HTMLDialogElement;
     modalElement?.showModal();

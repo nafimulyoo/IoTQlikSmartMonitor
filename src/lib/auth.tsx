@@ -1,4 +1,4 @@
- import axios from 'axios'
+
 
 
  function logout() {
@@ -33,21 +33,19 @@
 
 
 
-    const url = new URL('https://iot.ayou.id/api/login')
-    url.searchParams.append('user', username)
-    url.searchParams.append('pass', password)
-
-    // use axios to make a post request with application/json content type
-    const authResponse = await axios.post(url.toString(), {
-      headers: {
-        'Content-Type': 'application/json',
+    const authData = await fetch("/api/login", {
+      method: "POST",
+      next: {
+        revalidate: 3600
       },
-    })
-
-    const jsonString = authResponse.data.substring(authResponse.data.indexOf('{'))
-    const authData = JSON.parse(jsonString)
-
-    authData.site = authData.site.substring(2, authData.site.length - 2)
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    }).then(res => res.json());
 
 
     localStorage.setItem('token', authData.token)
