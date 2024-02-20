@@ -22,27 +22,27 @@ const HomePage = ({ logout }: any) => {
   const [modalData, setModalData] = useState({});
   const session = useContext(SessionContext);
 
-  console.log(session);
+  
   const openModal = (modal_data: any) => {
     setModalData(modal_data);
     setModalVisible(true);
-    console.log("modalData", modalData);
+    
   };
   const [activeTab, setActiveTab] = useState("dashboard");
 
   const handleTabChange = (event: any) => {
-    console.log("tab change", event.target);
+    
     setActiveTab(event.target.value);
   };
 
   const fetchHistory = async () => {
-    console.log("fetching history");
+    
     const { data, error }: any = await supabase
       .from("Query History")
       .select("*")
       .eq("username", session.username)
       .order("created_at", { ascending: false });
-    if (error) console.log("error", error);
+    if (error) console.log(error)
     else setHistory(data);
   };
 
@@ -53,12 +53,12 @@ const HomePage = ({ logout }: any) => {
       .select("*")
       .eq("username", session.username);
 
-    if (error) console.log("error", error);
+    if (error) console.log(error);
     else setDashboardCards(data);
   };
 
   const deleteDashboardCard = async (id: number) => {
-    console.log("deleting card", id);
+    
     const { error }: any = await supabase
       .from("Dashboard Card")
       .delete()
@@ -68,7 +68,7 @@ const HomePage = ({ logout }: any) => {
       variant: "destructive",
       title: `Card removed to dashboard`,
     });
-    if (error) console.log("error", error);
+    if (error) console.log(error); 
     else fetchDashboardCards();
   };
 

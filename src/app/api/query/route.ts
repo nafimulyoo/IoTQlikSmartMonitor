@@ -21,7 +21,6 @@ export async function POST(request: Request) {
       );
     } else if (query.query_input.type === "select") {
       structuredQuery = query.query_input.query_selection;
-      console.log("structuredQuery", structuredQuery);
     }
     const { error } = await supabase
     .from("Query History")
@@ -33,7 +32,6 @@ export async function POST(request: Request) {
        });
 
      if (error) {
-       console.error("Error saving structured query to supabase:", error);
        throw new Error("Error saving structured query");
      }
    
@@ -41,7 +39,6 @@ export async function POST(request: Request) {
     structuredQuery = query.query_input.query_input;
   }
   // this return string
-  console.log(structuredQuery);
   const url = getUrlFromStructuredQuery(
     structuredQuery,
     query.session.token,
@@ -61,7 +58,7 @@ export async function POST(request: Request) {
   const jsonString = data.data.substring(data.data.indexOf("{"));
   const apiData = JSON.parse(jsonString);
   // add structured query to the result
-  const query_result = { ...apiData, query_type: structuredQuery.query_type };
+  const query_result = { ...apiData, query_type: structuredQuery.query_type, query_name: structuredQuery.query_name };
 
   return new Response(JSON.stringify(query_result), {
     headers: { "content-type": "application/json" },

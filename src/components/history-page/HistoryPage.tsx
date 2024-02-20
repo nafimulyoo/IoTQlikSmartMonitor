@@ -12,8 +12,7 @@ const HistoryPage = ({
 }: any) => {
   const { toast } = useToast();
   const handleAddToDashboard = async (history: any, card_id: number) => {
-    console.log("saving history");
-    const { data, error }: any = await supabase.from("Dashboard Card").insert({
+    const { data, error }: any = await supabase.from("Dashboard Card").upsert({
       username: session.username,
       card_id: card_id,
       created_at: new Date(),
@@ -25,7 +24,6 @@ const HistoryPage = ({
       description: "You can now view this query on your dashboard",
     });
     fetchDashboardCards();
-    console.log("fetsh")
   };
 
   const handleViewHistory = async (structured_query: any, session: any) => {

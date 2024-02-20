@@ -32,7 +32,7 @@ const getUrlFromStructuredQuery = (
       }
       const from_time = structuredQuery.from_time + " 00:00:00"
       const to_time = structuredQuery.to_time + " 00:00:00"
-      console.log(from_time, to_time);
+      
       url.searchParams.append("from", from_time);
       url.searchParams.append("to", to_time);
       break;
@@ -44,79 +44,9 @@ const getUrlFromStructuredQuery = (
   url.searchParams.append("token", token);
   url.searchParams.append("site", site);
 
-  console.log(url.href);
+  
   return url.href;
 };
-
-// function getSelection(session)  {
-//   const structuredQuerySelection =  {
-//     label: 'Query Type',
-//     value: '',
-//     children: [
-//       {
-//         label: 'Device List',
-//         value: 'device-list',
-//         children: []
-//       },
-//       {
-//         label: 'Parameter List',
-//         value: 'parameter-list',
-//         children: [
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [] },
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [] },
-//         ]
-//       },
-//       {
-//         label: 'Data Last',
-//         value: 'data-last',
-//         children: [
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [] },
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [] },
-//         ]
-//       },
-//       {
-//         label: 'Alarm Log',
-//         value: 'alarm-log',
-//         children: []
-//       },
-//       {
-//         label: 'Data Log',
-//         value: 'data-log',
-//         children: [
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [
-//               { 
-//                 label: 'Voltage',
-//                 value: 'voltage',
-//                 children: []
-//               }
-//             ] },
-//           { label: 'Incoming PLN', 
-//             value: 'mcdpm1', 
-//             children: [
-//               { 
-//                 label: 'Voltage',
-//                 value: 'voltage',
-//                 children: []
-//               }
-//             ]
-//           },
-//         ]
-//       }
-//     ]
-//   }
-//   return structuredQuerySelection;
-// }
-// for branching selection
 
 
 const getResponseSchema = (deviceData: string) => {

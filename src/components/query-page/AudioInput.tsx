@@ -17,7 +17,7 @@ const AudioInput = ({ setInputText }: any) => {
     });
     const { text } = await response.json();
     // you must return result from your server in Transcript format
-    console.log(text);
+    
     setInputText(text);
     return {
       blob,

@@ -52,7 +52,7 @@ const SelectionInput = ({
         update: false,
       }),
     }).then((res) => res.json());
-    console.log(data);
+    
     setDeviceData(data);
   }
 
@@ -69,7 +69,7 @@ const SelectionInput = ({
       );
       if (selectedDeviceData) {
         setParameters(selectedDeviceData.parameters.parameter);
-        console.log(selectedDeviceData.parameters.parameter);
+        
       }
     }
   }, [deviceCode]);
@@ -87,7 +87,7 @@ const SelectionInput = ({
       },
     };
 
-    console.log(newInputQuery);
+    
     setInputQuery(newInputQuery);
   }, [queryType, deviceCode, parameterCode, date, queryName, setInputQuery]);
 

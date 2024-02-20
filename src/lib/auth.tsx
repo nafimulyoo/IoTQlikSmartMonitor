@@ -54,7 +54,7 @@
     localStorage.setItem('site', authData.site)
     localStorage.setItem('username', username)
     localStorage.setItem('expired', authData.expired)
-    console.log("login authorized")
+    
     return {
       status: "authorized",
       token: authData.token,
@@ -79,14 +79,26 @@ function isUsernameAvailable() {
 
 function isTokenExpired() {
 
-  if (localStorage.getItem('token')) {
-    return false
+  if (!localStorage.getItem('token')) {
+    localStorage.removeItem('token')
+    localStorage.removeItem('site')
+    localStorage.removeItem('username')
+    localStorage.removeItem('expired')
+    return true
   }
 
   const now = new Date()
   const expiration = new Date(localStorage.getItem('expired'))
+  
+  
+  
+  
 
   if (now > expiration) {
+      localStorage.removeItem('token')
+  localStorage.removeItem('site')
+  localStorage.removeItem('username')
+  localStorage.removeItem('expired')
     return true
   }
 
