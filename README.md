@@ -47,6 +47,10 @@ npm run dev
 Your IoTQlik Smart AI Monitor is now running on http://localhost:3000.
 ```
 
+## Screenshot
+![image](https://github.com/nafimulyoo/IoTQlikSmartMonitor/assets/108047880/e3950c8d-3988-4d4f-9b1b-d73ec4ad492c)
+
+
 ## Usage
 After setting up the project, you can start querying your IoT data using natural language. Simply type in your query in the provided input field, and IoTQlik Smart AI Monitor will process and present the data, leveraging the IoT data structure configured in your Supabase backend.
 
