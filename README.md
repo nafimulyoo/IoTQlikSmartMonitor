@@ -30,9 +30,9 @@ cd IoTQlik-Smart-AI-Monitor
 
 ```bash
 npm install
+```
 Environment Configuration
 Create a .env.local file at the root of your project and add your OpenAI API key and Supabase details:
-```
 
 ```env
 NEXT_PUBLIC_OPENAI_API_KEY=YourOpenAIKeyHere
